@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soulmask Takaro Bridge</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    h1 {
+      color: #58a6ff;
+      font-size: 2.2em;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      color: #8b949e;
+      font-size: 1.1em;
+      margin-bottom: 40px;
+    }
+    h2 {
+      color: #58a6ff;
+      font-size: 1.4em;
+      margin-top: 40px;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #21262d;
+    }
+    h3 {
+      color: #c9d1d9;
+      font-size: 1.1em;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    p { margin-bottom: 12px; }
+    a { color: #58a6ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code {
+      background: #161b22;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.9em;
+      color: #e6edf3;
+    }
+    pre {
+      background: #161b22;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      border: 1px solid #21262d;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      font-size: 0.85em;
+      line-height: 1.5;
+    }
+    .download-btn {
+      display: inline-block;
+      background: #238636;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 1.1em;
+      font-weight: 600;
+      margin: 20px 0;
+      transition: background 0.2s;
+    }
+    .download-btn:hover {
+      background: #2ea043;
+      text-decoration: none;
+    }
+    .step {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .step-number {
+      display: inline-block;
+      background: #238636;
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 28px;
+      font-weight: bold;
+      font-size: 0.85em;
+      margin-right: 10px;
+    }
+    .step-title {
+      font-weight: 600;
+      color: #e6edf3;
+      font-size: 1.05em;
+    }
+    .step p { margin-top: 10px; color: #8b949e; }
+    .warning {
+      background: #1c1305;
+      border: 1px solid #d29922;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .warning strong { color: #d29922; }
+    ul { margin: 10px 0 10px 24px; }
+    li { margin-bottom: 6px; }
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .feature {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .feature strong { color: #e6edf3; }
+    .feature p { color: #8b949e; font-size: 0.9em; margin-bottom: 0; }
+    @media (max-width: 600px) {
+      .features { grid-template-columns: 1fr; }
+      h1 { font-size: 1.6em; }
+    }
+    .config-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+    .config-table th, .config-table td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid #21262d;
+    }
+    .config-table th {
+      color: #8b949e;
+      font-size: 0.85em;
+      text-transform: uppercase;
+    }
+    .config-table td code { color: #7ee787; }
+    footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid #21262d;
+      color: #484f58;
+      font-size: 0.85em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Soulmask Takaro Bridge</h1>
+    <p class="subtitle">Connect your Soulmask dedicated server to <a href="https://takaro.io">Takaro</a> for player tracking, chat integration, and server management.</p>
+
+    <div class="features">
+      <div class="feature">
+        <strong>Player Tracking</strong>
+        <p>Automatic join/leave detection from server logs</p>
+      </div>
+      <div class="feature">
+        <strong>Chat Integration</strong>
+        <p>In-game chat forwarded to Takaro in real-time</p>
+      </div>
+      <div class="feature">
+        <strong>Server Commands</strong>
+        <p>Kick, ban/unban, send messages, save world via Takaro</p>
+      </div>
+      <div class="feature">
+        <strong>Auto-Reconnect</strong>
+        <p>Automatically reconnects to both RCON and Takaro</p>
+      </div>
+    </div>
+
+    <h2>Requirements</h2>
+    <ul>
+      <li><a href="https://nodejs.org/">Node.js</a> v18 or newer installed on the server</li>
+      <li>A Soulmask dedicated server with RCON enabled</li>
+      <li>A <a href="https://takaro.io">Takaro</a> account</li>
+    </ul>
+
+    <h2>Download</h2>
+    <p>Download the latest release and extract it to a folder on your server.</p>
+    <a href="https://github.com/mad-001/SoulmaskBridge/releases/latest" class="download-btn">Download Latest Release</a>
+
+    <h2>Installation</h2>
+
+    <div class="step">
+      <span class="step-number">1</span>
+      <span class="step-title">Extract the download</span>
+      <p>Extract the zip file to a folder on your server, e.g. <code>C:\SoulmaskBridge</code></p>
+    </div>
+
+    <div class="step">
+      <span class="step-number">2</span>
+      <span class="step-title">Install dependencies</span>
+      <p>Open a command prompt in the bridge folder and run:</p>
+      <pre><code>npm install --production</code></pre>
+    </div>
+
+    <div class="step">
+      <span class="step-number">3</span>
+      <span class="step-title">Enable RCON on your Soulmask server</span>
+      <p>Add these parameters to your Soulmask server startup command:</p>
+      <pre><code>-RconPassword="yourpassword" -EnableRCON</code></pre>
+      <p>You also need to whitelist the bridge's IP in your server's <code>Engine.ini</code> under <code>[Server.SafeIP]</code>. If the bridge runs on the same machine as the server, add <code>127.0.0.1</code>.</p>
+    </div>
+
+    <div class="step">
+      <span class="step-number">4</span>
+      <span class="step-title">Get your Takaro registration token</span>
+      <p>Go to the <a href="https://app.takaro.io">Takaro dashboard</a>, navigate to <strong>Game Servers</strong>, click <strong>Add Server</strong>, and select the custom game server option. Copy your <strong>Registration Token</strong>.</p>
+    </div>
+
+    <div class="step">
+      <span class="step-number">5</span>
+      <span class="step-title">Configure the bridge</span>
+      <p>Open <code>TakaroConfig.txt</code> in a text editor and fill in your settings:</p>
+      <table class="config-table">
+        <tr><th>Setting</th><th>Description</th></tr>
+        <tr><td><code>REGISTRATION_TOKEN</code></td><td>Your Takaro registration token from step 4</td></tr>
+        <tr><td><code>RCON_HOST</code></td><td>Server IP (use <code>127.0.0.1</code> if bridge runs on same machine)</td></tr>
+        <tr><td><code>RCON_PORT</code></td><td>RCON port (default: <code>19000</code>)</td></tr>
+        <tr><td><code>RCON_PASSWORD</code></td><td>The RCON password from your server startup command</td></tr>
+      </table>
+    </div>
+
+    <div class="step">
+      <span class="step-number">6</span>
+      <span class="step-title">Start the bridge</span>
+      <p>Double-click <code>start.bat</code> to launch the bridge. It will automatically reconnect if the connection drops and restart if it crashes.</p>
+    </div>
+
+    <div class="warning">
+      <strong>Note:</strong> The bridge must be able to read your Soulmask server's <code>WS.log</code> file. If the bridge runs on a different machine than the game server, the log file path in the bridge may need to be adjusted. By default, it looks for the log in the standard Soulmask server location.
+    </div>
+
+    <h2>Configuration Reference</h2>
+    <table class="config-table">
+      <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+      <tr><td><code>IDENTITY_TOKEN</code></td><td><code>Soulmask</code></td><td>Server name shown in Takaro dashboard</td></tr>
+      <tr><td><code>REGISTRATION_TOKEN</code></td><td></td><td>Token from Takaro dashboard (required)</td></tr>
+      <tr><td><code>RCON_HOST</code></td><td><code>127.0.0.1</code></td><td>Soulmask server IP address</td></tr>
+      <tr><td><code>RCON_PORT</code></td><td><code>19000</code></td><td>Soulmask RCON port</td></tr>
+      <tr><td><code>RCON_PASSWORD</code></td><td></td><td>RCON password (required)</td></tr>
+      <tr><td><code>PLAYER_POLL_INTERVAL</code></td><td><code>5000</code></td><td>Player poll interval in ms (legacy, not actively used)</td></tr>
+      <tr><td><code>HTTP_PORT</code></td><td><code>3535</code></td><td>Health check endpoint port</td></tr>
+      <tr><td><code>BAN_PERMISSION_TYPE</code></td><td><code>2</code></td><td>Permission list index for bans (run <code>lsp</code> in RCON to check)</td></tr>
+    </table>
+
+    <h2>Supported Commands</h2>
+    <p>Once connected, Takaro can perform these actions on your Soulmask server:</p>
+    <ul>
+      <li><strong>Kick player</strong> - Remove a player from the server</li>
+      <li><strong>Ban/Unban player</strong> - Add or remove players from the server blacklist</li>
+      <li><strong>Send message</strong> - Broadcast a message to all players</li>
+      <li><strong>Save world</strong> - Trigger a world save</li>
+      <li><strong>Execute command</strong> - Run any RCON command</li>
+    </ul>
+
+    <h2>Troubleshooting</h2>
+    <h3>Bridge can't connect to RCON</h3>
+    <ul>
+      <li>Make sure <code>-EnableRCON</code> and <code>-RconPassword</code> are in your server startup command</li>
+      <li>Check that the bridge IP is whitelisted in <code>Engine.ini</code> under <code>[Server.SafeIP]</code></li>
+      <li>Verify the port and password in <code>TakaroConfig.txt</code> match your server settings</li>
+    </ul>
+
+    <h3>Players not showing up in Takaro</h3>
+    <ul>
+      <li>The bridge detects players from the server's <code>WS.log</code> file</li>
+      <li>Make sure the bridge can access the log file on the same machine</li>
+      <li>Players who were already online when the bridge started will be detected on their next join</li>
+    </ul>
+
+    <h3>Chat messages not appearing</h3>
+    <ul>
+      <li>The bridge automatically sends <code>Set_OutputChats 1</code> to the server on connect</li>
+      <li>If chat still doesn't work, try running <code>Set_OutputChats 1</code> manually in RCON</li>
+    </ul>
+
+    <footer>
+      <p><a href="https://github.com/mad-001/SoulmaskBridge">GitHub Repository</a> &middot; Powered by <a href="https://takaro.io">Takaro</a></p>
+    </footer>
+  </div>
+</body>
+</html>
