@@ -1,170 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soulmask Takaro Bridge</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
-      background: #0d1117;
-      color: #c9d1d9;
-      line-height: 1.6;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
-    h1 {
-      color: #58a6ff;
-      font-size: 2.2em;
-      margin-bottom: 10px;
-    }
-    .subtitle {
-      color: #8b949e;
-      font-size: 1.1em;
-      margin-bottom: 40px;
-    }
-    h2 {
-      color: #58a6ff;
-      font-size: 1.4em;
-      margin-top: 40px;
-      margin-bottom: 15px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #21262d;
-    }
-    h3 {
-      color: #c9d1d9;
-      font-size: 1.1em;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
-    p { margin-bottom: 12px; }
-    a { color: #58a6ff; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    code {
-      background: #161b22;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
-      font-size: 0.9em;
-      color: #e6edf3;
-    }
-    pre {
-      background: #161b22;
-      padding: 16px;
-      border-radius: 8px;
-      overflow-x: auto;
-      margin-bottom: 16px;
-      border: 1px solid #21262d;
-    }
-    pre code {
-      background: none;
-      padding: 0;
-      font-size: 0.85em;
-      line-height: 1.5;
-    }
-    .download-btn {
-      display: inline-block;
-      background: #238636;
-      color: #fff;
-      padding: 14px 28px;
-      border-radius: 8px;
-      font-size: 1.1em;
-      font-weight: 600;
-      margin: 20px 0;
-      transition: background 0.2s;
-    }
-    .download-btn:hover {
-      background: #2ea043;
-      text-decoration: none;
-    }
-    .step {
-      background: #161b22;
-      border: 1px solid #21262d;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-    .step-number {
-      display: inline-block;
-      background: #238636;
-      color: #fff;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 28px;
-      font-weight: bold;
-      font-size: 0.85em;
-      margin-right: 10px;
-    }
-    .step-title {
-      font-weight: 600;
-      color: #e6edf3;
-      font-size: 1.05em;
-    }
-    .step p { margin-top: 10px; color: #8b949e; }
-    .warning {
-      background: #1c1305;
-      border: 1px solid #d29922;
-      border-radius: 8px;
-      padding: 16px;
-      margin: 16px 0;
-    }
-    .warning strong { color: #d29922; }
-    ul { margin: 10px 0 10px 24px; }
-    li { margin-bottom: 6px; }
-    .features {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin: 16px 0;
-    }
-    .feature {
-      background: #161b22;
-      border: 1px solid #21262d;
-      border-radius: 8px;
-      padding: 16px;
-    }
-    .feature strong { color: #e6edf3; }
-    .feature p { color: #8b949e; font-size: 0.9em; margin-bottom: 0; }
-    @media (max-width: 600px) {
-      .features { grid-template-columns: 1fr; }
-      h1 { font-size: 1.6em; }
-    }
-    .config-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 16px 0;
-    }
-    .config-table th, .config-table td {
-      text-align: left;
-      padding: 10px 12px;
-      border-bottom: 1px solid #21262d;
-    }
-    .config-table th {
-      color: #8b949e;
-      font-size: 0.85em;
-      text-transform: uppercase;
-    }
-    .config-table td code { color: #7ee787; }
-    footer {
-      margin-top: 60px;
-      padding-top: 20px;
-      border-top: 1px solid #21262d;
-      color: #484f58;
-      font-size: 0.85em;
-      text-align: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soulmask Server Manager - Takaro</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%8E%AE</text></svg>">
+    <meta name="description" content="Manage your Soulmask dedicated server with Takaro — players, server control, teleports, and more. A free Soulmask Server Manager.">
+    <meta property="og:title" content="Soulmask Server Manager - Takaro">
+    <meta property="og:description" content="Manage your Soulmask dedicated server with Takaro — players, server control, teleports, and more. A free Soulmask Server Manager.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mad-001.github.io/SoulmaskBridge/">
+    <meta property="og:image" content="https://mad-001.github.io/SoulmaskBridge/hero.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <style>
+        :root { --bg:#0f1013; --text:#e4e7ee; --heading:#fff; --muted:#9aa1b1; --border:#262a33; --accent:#58a6ff; --code-bg:#1c1f26; --pre-bg:#17191f; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.7; -webkit-font-smoothing:antialiased; }
+        .page { display:flex; gap:64px; max-width:1500px; margin:0 auto; padding:0 48px; }
+        .content { flex:1; min-width:0; padding:32px 0 96px; }
+        .toc { width:220px; flex-shrink:0; position:sticky; top:0; align-self:flex-start; padding-top:48px; }
+        .toc a { display:block; color:var(--muted); padding:6px 0; font-size:.92rem; }
+        .toc a:hover { color:var(--text); text-decoration:none; }
+        .hero { position:relative; min-height:300px; border-radius:12px; overflow:hidden; background-image:url('hero.jpg'); background-size:cover; background-position:center; display:flex; align-items:flex-end; margin-bottom:28px; }
+        .hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(15,16,20,.95) 0%, rgba(15,16,20,.5) 50%, rgba(15,16,20,.2) 100%); }
+        .hero-inner { position:relative; z-index:1; padding:32px; }
+        h1 { font-size:2.6rem; font-weight:800; letter-spacing:-.02em; color:#fff; margin-bottom:10px; }
+        .subtitle { font-size:1.2rem; color:#dfe3ea; max-width:620px; }
+        h2 { font-size:1.5rem; font-weight:700; margin-top:48px; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border); color:var(--heading); scroll-margin-top:20px; }
+        h3 { font-size:1.15rem; font-weight:600; margin-top:26px; margin-bottom:8px; color:var(--heading); }
+        p { margin-bottom:14px; }
+        a { color:var(--accent); text-decoration:none; }
+        a:hover { text-decoration:underline; }
+        a code, a strong { color:var(--accent); }
+        strong { color:#e6e9ef; font-weight:600; }
+        .download-btn { display:inline-block; background:var(--accent); color:#16181d; padding:11px 24px; border-radius:8px; font-weight:700; margin:8px 0 4px; }
+        .download-btn:hover { filter:brightness(1.1); text-decoration:none; }
+        code { background:var(--code-bg); color:#e3b7ff; padding:.15em .4em; border-radius:5px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.86em; }
+        pre { background:var(--pre-bg); border:1px solid var(--border); border-radius:8px; padding:14px 16px; overflow-x:auto; margin:14px 0; }
+        pre code { background:none; padding:0; color:#d7dbe3; font-size:.85em; }
+        ul, ol { margin:12px 0 14px 24px; }
+        li { margin-bottom:6px; }
+        .info-box, .warning-box, .note { padding:12px 16px; border-radius:8px; margin:18px 0; border-left:4px solid var(--border); }
+        .info-box { border-left-color:var(--accent); background:#151a22; }
+        .warning-box { border-left-color:#ef4444; background:#241a1c; }
+        .note { border-left-color:#f59e0b; background:#241f18; }
+        @media (max-width:900px){ .page{display:block;padding:0 20px;} .toc{display:none;} }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Soulmask Takaro Bridge</h1>
-    <p class="subtitle">Connect your Soulmask dedicated server to <a href="https://takaro.io/pricing/?via=zach550">Takaro</a> for player tracking, chat integration, and server management.</p>
+    <div class="page">
+        <main class="content">
+            <div class="hero">
+                <div class="hero-inner">
+                    <h1>Soulmask Server Manager - Takaro</h1>
+                    <p class="subtitle">Manage your Soulmask dedicated server with Takaro — players, server control, teleports, and more. A free Soulmask Server Manager.</p>
+                </div>
+            </div>
+<p class="subtitle">Connect your Soulmask dedicated server to <a href="https://takaro.io/pricing/?via=zach550">Takaro</a> for player tracking, chat integration, and server management.</p>
 
     <div class="features">
       <div class="feature">
@@ -185,18 +77,18 @@
       </div>
     </div>
 
-    <h2>Requirements</h2>
+    <h2 id="sec1">Requirements</h2>
     <ul>
       <li><a href="https://nodejs.org/">Node.js</a> v18 or newer installed on the server</li>
       <li>A Soulmask dedicated server with RCON enabled</li>
       <li>A <a href="https://takaro.io/pricing/?via=zach550">Takaro</a> account</li>
     </ul>
 
-    <h2>Download</h2>
+    <h2 id="sec2">Download</h2>
     <p>Download the latest release and extract it to a folder on your server.</p>
     <a href="https://github.com/mad-001/SoulmaskBridge/releases/latest" class="download-btn">Download Latest Release</a>
 
-    <h2>Installation</h2>
+    <h2 id="sec3">Installation</h2>
 
     <div class="step">
       <span class="step-number">1</span>
@@ -248,7 +140,7 @@
       <strong>Note:</strong> The bridge must be able to read your Soulmask server's <code>WS.log</code> file. If the bridge runs on a different machine than the game server, the log file path in the bridge may need to be adjusted. By default, it looks for the log in the standard Soulmask server location.
     </div>
 
-    <h2>Configuration Reference</h2>
+    <h2 id="sec4">Configuration Reference</h2>
     <table class="config-table">
       <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
       <tr><td><code>IDENTITY_TOKEN</code></td><td><code>Soulmask</code></td><td>Server name shown in Takaro dashboard</td></tr>
@@ -261,7 +153,7 @@
       <tr><td><code>BAN_PERMISSION_TYPE</code></td><td><code>2</code></td><td>Permission list index for bans (run <code>lsp</code> in RCON to check)</td></tr>
     </table>
 
-    <h2>Supported Commands</h2>
+    <h2 id="sec5">Supported Commands</h2>
     <p>Once connected, Takaro can perform these actions on your Soulmask server:</p>
     <ul>
       <li><strong>Kick player</strong> - Remove a player from the server</li>
@@ -271,7 +163,7 @@
       <li><strong>Execute command</strong> - Run any RCON command</li>
     </ul>
 
-    <h2>Troubleshooting</h2>
+    <h2 id="sec6">Troubleshooting</h2>
     <h3>Bridge can't connect to RCON</h3>
     <ul>
       <li>Make sure <code>-EnableRCON</code> and <code>-RconPassword</code> are in your server startup command</li>
@@ -295,6 +187,15 @@
     <footer>
       <p><a href="https://github.com/mad-001/SoulmaskBridge">GitHub Repository</a> &middot; Powered by <a href="https://takaro.io/pricing/?via=zach550">Takaro</a></p>
     </footer>
-  </div>
+        </main>
+        <nav class="toc">
+            <a href="#sec1">Requirements</a>
+            <a href="#sec2">Download</a>
+            <a href="#sec3">Installation</a>
+            <a href="#sec4">Configuration Reference</a>
+            <a href="#sec5">Supported Commands</a>
+            <a href="#sec6">Troubleshooting</a>
+        </nav>
+    </div>
 </body>
 </html>
