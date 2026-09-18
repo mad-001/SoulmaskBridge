@@ -1,0 +1,41 @@
+# ============================================================
+# Takaro Soulmask Bridge - Configuration
+# ============================================================
+
+# Your server's name in Takaro (shown in dashboard)
+IDENTITY_TOKEN=Soulmask
+
+# Registration token from the Takaro dashboard
+# Get this at: https://takaro.io/dashboard -> Game Servers -> Add Server
+REGISTRATION_TOKEN=
+
+# ============================================================
+# Soulmask RCON Settings
+# ============================================================
+
+# IP address of your Soulmask server (use 127.0.0.1 if bridge runs on same machine)
+RCON_HOST=127.0.0.1
+
+# RCON port (default: 19000)
+# Set in Engine.ini under [OnlineSubsystem] or server startup parameters
+RCON_PORT=19000
+
+# RCON password
+# Set via -RconPassword="yourpassword" in your server startup command
+# Also configure IP whitelist in Engine.ini under [Server.SafeIP]
+RCON_PASSWORD=
+
+# ============================================================
+# Bridge Settings
+# ============================================================
+
+# How often to poll the player list for join/leave detection (milliseconds)
+PLAYER_POLL_INTERVAL=5000
+
+# HTTP port for the health check endpoint (http://127.0.0.1:PORT/health)
+HTTP_PORT=3535
+
+# Permission list type index for banning players
+# Run "lsp" in RCON to see your server's permission list indices
+# Typically: 0=AdminList, 1=Whitelist, 2=Blacklist
+BAN_PERMISSION_TYPE=2
