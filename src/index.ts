@@ -111,8 +111,8 @@ const BASE_RECONNECT_DELAY = 3000;
 
 let rconReconnectTimeout: NodeJS.Timeout | null = null;
 let rconReconnectAttempts = 0;
-const MAX_RCON_RECONNECT_ATTEMPTS = 100;
 const RCON_RECONNECT_DELAY = 5000;
+const MAX_RCON_RECONNECT_DELAY = 60000;
 
 const metrics = {
   requestsReceived: 0,
@@ -635,8 +635,10 @@ function sendGameEvent(eventType: string, data: any) {
     return;
   }
 
-  const playerInfo = data.player?.name ? ` - ${data.player.name}` : '';
-  logger.info(`Game event: ${eventType}${playerInfo}`);
+  if (eventType !== 'log') {
+    const playerInfo = data.player?.name ? ` - ${data.player.name}` : '';
+    logger.info(`Game event: ${eventType}${playerInfo}`);
+  }
 
   const cleanPlayer: any = {};
   if (data.player) {
@@ -646,17 +648,20 @@ function sendGameEvent(eventType: string, data: any) {
     if (data.player.steamId) cleanPlayer.steamId = data.player.steamId;
   }
 
+  const eventData: any = {};
+  if (data.player) {
+    eventData.player = cleanPlayer;
+  }
+  if (data.msg !== undefined) eventData.msg = data.msg;
+  if (data.channel !== undefined) eventData.channel = data.channel;
+
   const message: any = {
     type: 'gameEvent',
     payload: {
       type: eventType,
-      data: { player: cleanPlayer }
+      data: eventData
     }
   };
-
-  // Forward extra event data (e.g. msg for chat events)
-  if (data.msg !== undefined) message.payload.data.msg = data.msg;
-  if (data.channel !== undefined) message.payload.data.channel = data.channel;
 
   sendToTakaro(message);
   metrics.eventsSent++;
@@ -730,7 +735,14 @@ function readLogFile() {
     logFilePosition = stat.size;
 
     for (const line of buf.toString('utf8').split('\n')) {
-      parseLogLine(line.trim());
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+
+      // Forward every log line to Takaro
+      sendGameEvent('log', { msg: trimmed });
+
+      // Also parse for player joins/leaves/chat
+      parseLogLine(trimmed);
     }
   } catch (_) {}
 }
@@ -759,12 +771,12 @@ function parseLogLine(line: string) {
   if (leaveMatch) {
     const steamId = leaveMatch[1].trim();
     const player = knownPlayers.get(steamId);
-    if (!player) return;
+    const name = player?.name || 'Unknown';
 
     knownPlayers.delete(steamId);
-    logger.info(`Player left: ${player.name} (${steamId})`);
+    logger.info(`Player left: ${name} (${steamId})`);
     sendGameEvent('player-disconnected', {
-      player: { gameId: player.gameId, name: player.name, platformId: `soulmask:${player.steamId}`, steamId: player.steamId }
+      player: { gameId: steamId, name, platformId: `soulmask:${steamId}`, steamId }
     });
     return;
   }
@@ -829,13 +841,11 @@ async function connectToRcon() {
         rconReconnectTimeout = null;
       }
       rconClient!.send('Set_OutputChats 1').catch(() => {});
-      startLogWatch();
     });
 
     rconClient.on('end', () => {
       logger.warn('Disconnected from Soulmask RCON');
       isConnectedToRcon = false;
-      stopLogWatch();
       knownPlayers.clear();
       scheduleRconReconnect();
     });
@@ -862,17 +872,20 @@ async function connectToRcon() {
 function scheduleRconReconnect() {
   if (rconReconnectTimeout) clearTimeout(rconReconnectTimeout);
 
-  if (rconReconnectAttempts >= MAX_RCON_RECONNECT_ATTEMPTS) {
-    logger.error(`RCON reconnection gave up after ${MAX_RCON_RECONNECT_ATTEMPTS} attempts`);
-    return;
-  }
+  // Never stop retrying. The game server goes away for updates, restarts and
+  // crashes; the bridge has to pick RCON back up on its own. Backing off also
+  // stops us hammering the RCON port every 5s while the server is down.
+  const delay = Math.min(
+    RCON_RECONNECT_DELAY * Math.pow(2, rconReconnectAttempts),
+    MAX_RCON_RECONNECT_DELAY
+  );
 
-  logger.info(`Scheduling RCON reconnection in ${RCON_RECONNECT_DELAY}ms... (attempt ${rconReconnectAttempts + 1})`);
+  logger.info(`Scheduling RCON reconnection in ${delay}ms... (attempt ${rconReconnectAttempts + 1})`);
 
   rconReconnectTimeout = setTimeout(() => {
     rconReconnectAttempts++;
     connectToRcon();
-  }, RCON_RECONNECT_DELAY);
+  }, delay);
 }
 
 // ========================================
@@ -913,6 +926,7 @@ app.listen(HTTP_PORT, '127.0.0.1', () => {
 
 connectToTakaro();
 connectToRcon();
+startLogWatch();
 
 // ========================================
 // Graceful shutdown

@@ -1,0 +1,122 @@
+================================================================================
+ SOULMASK DEDICATED SERVER - NEW SERVER SETUP + FIXES
+ (Windows, SteamCMD, no Steam client needed)
+================================================================================
+Last verified: 2026-07-12 on SERVER (192.168.1.27), install at C:\gameservers\soulmask
+One-click launcher: C:\gameservers\soulmask\start.bat  (it does all of the below automatically)
+
+
+--------------------------------------------------------------------------------
+ THE #1 GOTCHA: STEAM DLLs ARE IN THE WRONG FOLDER  <-- this was the multi-hour bug
+--------------------------------------------------------------------------------
+When you install/update the dedicated server with SteamCMD, the Steam DLLs land in
+the INSTALL ROOT:
+
+    C:\gameservers\soulmask\steamclient64.dll   (+ steamclient.dll, tier0_s*.dll,
+                                                   vstdlib_s*.dll, steamwebrtc*.dll)
+
+But the server binary (WSServer-Win64-Shipping.exe) lives in:
+
+    C:\gameservers\soulmask\WS\Binaries\Win64\
+
+SteamGameServer_Init needs those DLLs RIGHT NEXT TO the binary (in Win64). If they
+are not there, the log shows:
+
+    LogSteamShared: Steam Dedicated Server API failed to initialize.
+    LogOnline: STEAM: [AppId: 0] Game Server API initialized 0
+
+...and the server instantly exits. (Confirmed by comparing to the working Palworld
+server, whose steamclient64.dll sits next to ITS binary. Steam client is NOT
+installed on the box and is NOT needed.)
+
+FIX: copy these from the root into WS\Binaries\Win64 after every install/update:
+    steamclient*.dll
+    tier0_s*.dll
+    vstdlib_s*.dll
+    steamwebrtc*.dll
+
+start.bat does this automatically with:
+    xcopy /D /Y steamclient*.dll  "WS\Binaries\Win64\"
+    xcopy /D /Y tier0_s*.dll      "WS\Binaries\Win64\"
+    xcopy /D /Y vstdlib_s*.dll    "WS\Binaries\Win64\"
+    xcopy /D /Y steamwebrtc*.dll  "WS\Binaries\Win64\"
+(/D = only copies when the root file is newer, so it's a no-op unless there was an update.)
+
+
+--------------------------------------------------------------------------------
+ THE #2 GOTCHA: QUERY PORT MUST BE UNIQUE (not 27015)
+--------------------------------------------------------------------------------
+Two Steam game-servers on one machine CANNOT share a Steam query port.
+Palworld already uses UDP 27015 on this box. If Soulmask also uses 27015:
+
+    LogOnline: STEAM: [AppId: 2646460] Game Server API initialized 0   (exits)
+
+On a free query port (e.g. 27016) it works:
+
+    LogOnline: STEAM: [AppId: 2646460] Game Server API initialized 1   (boots!)
+
+FIX: give Soulmask its own query port. We use -QueryPort=27016.
+(If you want external players on 27015, forward 27015->27016 on the router, or move
+Palworld's query port. Do NOT just set Soulmask to 27015 while Palworld runs.)
+
+
+--------------------------------------------------------------------------------
+ steam_appid.txt
+--------------------------------------------------------------------------------
+Must exist at WS\Binaries\Win64\steam_appid.txt containing exactly:  2646460
+(2646460 is the GAME id - it is correct and shows as [AppId: 2646460] even on success.
+The DEDICATED SERVER download app id is 3017310 - different thing, download only.)
+
+
+--------------------------------------------------------------------------------
+ DOWNLOAD / UPDATE (anonymous - no account, no Steam client)
+--------------------------------------------------------------------------------
+    "C:\SteamCMD\steamcmd.exe" +force_install_dir "C:\gameservers\soulmask" +login anonymous +app_update 3017310 validate +quit
+
+Windows dedicated server app = 3017310  (Linux = 3017300)
+NOTE: run steamcmd from a REAL console (double-click / interactive). It STALLS if
+launched detached, via a scheduled task (session 0), or with stdout redirected.
+
+
+--------------------------------------------------------------------------------
+ LAUNCH
+--------------------------------------------------------------------------------
+Launch the shipping binary DIRECTLY (the WSServer.exe launcher strips the SteamAppId
+env var, giving [AppId: 0]). Set SteamAppId in the bat first:
+
+    set SteamAppId=2646460
+    set SteamGameId=2646460
+    start "Soulmask Server" /wait WS\Binaries\Win64\WSServer-Win64-Shipping.exe <MAP> -server -log -UTF8Output -MULTIHOME=0.0.0.0 -EchoPort=18888 -forcepassthrough -Port=7777 -QueryPort=27016 -SteamServerName="Bloodlines No Mercy" -MaxPlayers=50 -GongHuiMaxMember=50 -adminpsw="madAdmin" -pve -saving=600 -backup=900 -initbackup -backupinterval=60 -serverpm=26 -rconaddr=0.0.0.0 -rconpsw=madRcon -rconport=7778
+
+Success in WS\Saved\Logs\WS.log (~line 126):
+    LogOnline: STEAM: [AppId: 2646460] Game Server API initialized 1
+
+
+--------------------------------------------------------------------------------
+ MAPS  (first parameter = <MAP> above)
+--------------------------------------------------------------------------------
+    Level01_Main          = Cloud Mist Forest   (original base map)
+    DLC_Level01_Main?ND=3 = Shifting Sands       (NEWEST - desert/pyramid DLC, ~doubles content)
+                                                 (the ?ND=3 is a game-mode flag we run)
+    The dedicated server download INCLUDES the DLC map content - no purchase needed on the server.
+    Current server runs: DLC_Level01_Main?ND=3 (Shifting Sands).
+
+
+--------------------------------------------------------------------------------
+ DEAD ENDS - do NOT waste time on these (all tested, none work / not needed)
+--------------------------------------------------------------------------------
+  - Installing the Steam client on the server  -> NOT needed (Palworld proves it)
+  - -NOSTEAM flag                              -> Soulmask ignores it and still exits
+  - Changing runtime app id to 3017310         -> wrong; runtime is 2646460
+  - steam_appid.txt location alone             -> not enough; the DLLs are the real fix
+  - SteamAppId env via PowerShell Start-Process-> doesn't propagate; use a .bat
+
+
+--------------------------------------------------------------------------------
+ PORTS SUMMARY
+--------------------------------------------------------------------------------
+  -Port      7777    game        (UDP, open externally)
+  -QueryPort 27016   Steam query (UDP, open externally; NOT 27015 = Palworld)
+  -EchoPort  18888   telnet maintenance (TCP, local only)
+  RCON       7778    Takaro bridge (TCP)
+================================================================================
